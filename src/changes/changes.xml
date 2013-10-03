@@ -1,0 +1,162 @@
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+  <properties>
+    <title>Changes to the Middleware Project</title>
+    <author email="Thomas.W.Narock@nasa.gov">Tom Narock</author>
+  </properties>
+  <body>
+    
+     <release version="1.2.0" date="2012-03-01" description="Version 1.2.0 Release">
+      <action dev="narock" type="fix">
+		Fixed bug GetGranuleURLs. A table that was already in UTC was being incorrectly 
+		converted to UTC again by a query.
+      </action>
+     </release>
+     
+     <release version="1.1.9" date="2011-06-01" description="Version 1.1.9 Release">
+      <action dev="narock" type="fix">
+		Fixed bug in atSameTime search. Previously, the SQL query was incorrect and finding
+		times of availability, not times of overlap.
+      </action>
+     </release>
+     
+     <release version="1.1.8" date="2011-05-13" description="Version 1.1.8 Release">
+      <action dev="narock" type="add">
+		Added code to check if start date was after stop date. If yes, then dates are reversed
+		and a warning is printed to the response message.
+      </action>
+      <action dev="narock" type="add">
+		Added code to look for planets (and hence Earth-based spacecraft) when HCI search is conducted.
+      </action>
+      <action dev="narock" type="update">
+		Updated how temporary tables are constructed. Use integer productID (resource_id) instead of
+		string productID (spase_id) as it makes the queries faster.  All classes interacting with temporary
+		tables were updated accordingly.
+      </action>
+      <action dev="narock" type="update">
+		Updated the SQL query that returns granule information. Now includes start/stop time of temp_final
+		table, which makes the query significantly faster.
+      </action>
+     </release>
+     
+     <release version="1.1.7" date="2011-03-16" description="Version 1.1.7 Release">
+      <action dev="narock" type="update">
+	Added more SQL escaping/validation.
+      </action>
+      <action dev="narock" type="add">
+	Added query forwarding for ResourceID and ObservatoryRegion.
+      </action>
+      <action dev="narock" type="update">
+	Updated handling of Regions in middleware. Regions are now expanded and all sub-regions are also searched, 
+	e.g. Earth.Magnetosphere will search Magnetosphere, Magnetosphere.Main, and Magnetosphere.Tail
+      </action>
+     </release>
+    
+     <release version="1.1.6" date="2011-02-16" description="Version 1.1.6 Release">
+      <action dev="alaimo" type="update">
+	Updated how cancel file is created and handled.
+      </action>
+    </release>
+    
+    <release version="1.1.5" date="2011-02-14" description="Version 1.1.5 Release">
+      <action dev="narock" type="update">
+	Updated the xslt transform of SPASE XML to owl.
+      </action>
+    </release>
+    
+    <release version="1.1.4" date="2011-02-04" description="Version 1.1.4 Release">
+      <action dev="alaimo" type="update">
+	Updated the previous requirement that the Execute class would produce a PHP error page
+	in the event that there was an error during the query execution.  The end result is the
+	redirection to the PHP response pages which will only display the error message, contact form
+	and a back button at present.	
+      </action>
+    </release>
+
+    <release version="1.1.3" date="2011-01-31" description="Version 1.1.3 Release">
+      <action dev="narock" type="fix">
+        Fixed StatsPlots servlet handling of input file. Previously the servlet did not account 
+        for api call where the response files have different names than they do when generated 
+        from the web interface.  Thus, this servlet only worked for the web interface. This has
+        been resolved.
+      </action>
+      <action dev="alaimo" type="fix">
+        Updated Granules query to fix issue with SQL DISTINCT. Previously the DISITINCT was in
+        the wrong place in the query, which caused results not to be shown for products that 
+        are from multiple instruments.
+      </action>
+    </release>
+    
+    <release version="1.1.2" date="2011-01-28" description="Version 1.1.2 Release">
+      <action dev="alaimo" type="update">
+        Updated SPASEQL dependency to 1.6.5, which adds support for Keyword queries.
+      </action>
+    </release>
+    
+    <release version="1.1.1" date="2011-01-24" description="Version 1.1.1 Release">
+      <action dev="narock" type="add">
+        Added check on limit value.  If user requests a limit greater than 2000 through the api then the limit is
+        automatically truncated to 2000.
+      </action>
+      <action dev="narock" type="update">
+        SPASEQL dependency updated to 1.6.4, which allows SPASEQL query schema to be specified as input variable. Removes the 
+        dependency that the spaseql server (home of the schema) had to be online for queries to validate.
+      </action>
+    </release>
+    
+    <release version="1.1.0" date="2011-01-19" description="Version 1.1.0 Release">
+      <action dev="alaimo" type="update">
+        Updated servlets to work with new php results pages.
+      </action>
+      <action dev="narock" type="remove">
+        Removed external jars in resources/lib and made part of Maven dependencies.
+      </action>
+       <action dev="narock" type="update">
+        SPASEQL dependency updated to 1.6.4, which allows SPASEQL query schema to be specified as input variable. Removes the 
+        dependency that the spaseql server (home of the schema) had to be online for queries to validate.
+      </action>
+    </release>
+    
+    <release version="1.0.4" date="2010-11-04" description="Version 1.0.4 Release">
+      <action dev="alaimo" type="update">
+        Updated query results code to work with new php results pages.
+      </action>
+      <action dev="narock" type="remove">
+        Removed unused code from older versions.
+      </action>
+    </release>
+    
+    <release version="1.0.2" date="2010-11-04" description="Version 1.0.2 Release">
+      <action dev="alaimo" type="fix">
+        Fixed resourceType=granule search that was mistakenly broken in previous release.
+      </action>
+      <action dev="narock" type="update">
+        Updated how SPASEQL schema is handled. Now read from SPASEQL website (HTTP) instead of from local file.
+      </action>
+    </release>
+    
+    <release version="1.0.1" date="2010-09-28" description="Bug Fixes and Functionality Additions">
+      <action dev="narock" type="update">
+        Updated Inventory (AvailableData.java) to now have start/stop times as per change in SPASEQL schema.
+      </action>
+      <action dev="alaimo" type="update">
+        Updated response page to now include new Contact Form.
+      </action>
+      <action dev="narock" type="fix">
+        Fixed the way queries, which do not request granules in the results, are handled.
+      </action>
+      <action dev="narock" type="fix">
+        Fixed how start/stop times are retrieved from the database for products. No need to get all granule intervals. 
+        Now use min and max functions.
+      </action>
+    </release>
+
+    <release version="1.0.0" date="2010-09-15" description="First release">
+      <action dev="narock" type="update">
+        Initial Release.
+      </action>
+    </release>
+    
+  </body>
+</document>

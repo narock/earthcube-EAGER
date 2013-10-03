@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="VxO Middleware">
+
+  <bannerRight>
+  	<src>http://maven.apache.org/images/maven-small.gif</src>
+  </bannerRight>
+
+  <body>
+  	<links/>
+  	<menu/>
+    <menu ref="reports"/> 
+  </body>
+    
+</project>
