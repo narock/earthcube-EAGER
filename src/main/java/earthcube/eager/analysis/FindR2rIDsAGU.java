@@ -123,14 +123,14 @@ public class FindR2rIDsAGU
 				}
 				
 				// Cruise Title
-				if ( aguData.getAbstract().contains( r2rData.getCruiseTitle() ) ) {
-					if ( !checkHashMap(cruiseTitles, rdfFiles.get(i), r2rData.getCruiseTitle()) )
-					{
-					  cruiseTitleCount++; 
-					  writter.append( cruiseTitleFile, rdfFiles.get(i) + "," + r2rData.getCruiseTitle());
-					  cruiseTitles.put(rdfFiles.get(i), r2rData.getCruiseTitle());
-					} 
-				}
+				//if ( aguData.getAbstract().contains( r2rData.getCruiseTitle() ) ) {
+				//	if ( !checkHashMap(cruiseTitles, rdfFiles.get(i), r2rData.getCruiseTitle()) )
+				//	{
+				//	  cruiseTitleCount++; 
+				//	  writter.append( cruiseTitleFile, rdfFiles.get(i) + "," + r2rData.getCruiseTitle());
+				//	  cruiseTitles.put(rdfFiles.get(i), r2rData.getCruiseTitle());
+				//	} 
+				//}
 				
 			 	// Vessel Name
 				if ( aguData.getAbstract().contains( r2rData.getVesselName()) ) {

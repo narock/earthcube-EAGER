@@ -56,7 +56,7 @@ public class FindR2rIDsNSF
 	  HashMap <String,String> cruiseTitles = new HashMap <String,String> ();
 	  HashMap <String,String> vesselNames = new HashMap <String,String> ();
 
-	  // Find all the relevant AGU data
+	  // Find all the relevant NSF data
 	  GetListOfFiles getFileList = new GetListOfFiles ();
 	  ArrayList <String> rdfFiles = getFileList.Process( new File (rdfDir) );
 	  System.out.println( "There are " + rdfFiles.size() + " RDF files");
@@ -101,14 +101,15 @@ public class FindR2rIDsNSF
 					 }
 				
 					 // Cruise Title
-					 if ( nsfData.getAbstract().contains( r2rData.getCruiseTitle() ) ) {
-						 if ( !checkHashMap(cruiseTitles, rdfFiles.get(i), r2rData.getCruiseTitle()) )
-						 {
-							 cruiseTitleCount++; 
-							 writter.append( cruiseTitleFile, rdfFiles.get(i) + "," + r2rData.getCruiseTitle());
-							 cruiseTitles.put(rdfFiles.get(i), r2rData.getCruiseTitle());
-						 } 
-					 }
+					 //if ( nsfData.getAbstract().contains( r2rData.getCruiseTitle() ) ) {
+					 //	 System.out.println("Cruise Title: " + r2rData.getCruiseTitle());
+					 //	 if ( !checkHashMap(cruiseTitles, rdfFiles.get(i), r2rData.getCruiseTitle()) )
+					 //	 {
+					 //		 cruiseTitleCount++; 
+					 //		 writter.append( cruiseTitleFile, rdfFiles.get(i) + "," + r2rData.getCruiseTitle());
+					 //		 cruiseTitles.put(rdfFiles.get(i), r2rData.getCruiseTitle());
+					 //	 } 
+					 //}
 				
 					 // Vessel Name
 					 if ( nsfData.getAbstract().contains( r2rData.getVesselName()) ) {
