@@ -51,6 +51,7 @@ public class RestService {
         final StringBuilder builder = new StringBuilder(2048);
         try {
         	
+        	System.out.println("Executing Method");
         	int statusCode = client.executeMethod(method);
         
         	if (statusCode != HttpStatus.SC_OK) {
@@ -59,9 +60,11 @@ public class RestService {
         	InputStream rstream = null;
         
         	// Get the response body
+        	System.out.println("Get Response");
         	rstream = method.getResponseBodyAsStream();
         
         	// Process the response 
+        	System.out.println("Processing Response...");
         	BufferedReader br = new BufferedReader(new InputStreamReader(rstream));
         	while ((line = br.readLine()) != null) { builder.append(line); }
         	br.close();
@@ -69,6 +72,7 @@ public class RestService {
         } catch (Exception e) { System.out.println(e); }
         
         // convert response to JSON array
+    	System.out.println("Converting response to JSON...");
         JSONArray jsa = null;
         try {
         	jsa = new JSONArray(builder.toString());
