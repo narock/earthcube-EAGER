@@ -4,7 +4,7 @@ import earthcube.eager.util.Constants;
 
 public class AwardAmount {
 	
-	public String toRdfXml ( AwardAmount a ) {
+	public String toRdfXml ( AwardAmountData a ) {
 	
 		String output =
 		
@@ -18,7 +18,7 @@ public class AwardAmount {
 		  "   xml:base=\"http://schema.ocean-data.org/funding-award\">" + Constants.newLine +
 		  "   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/AwardAmount/" + a.getAwardAmount + "\">" + Constants.newLine +
 		  "      <rdf:type rdf:resource=\"AwardAmount\"/>" + Constants.newLine +
-		  "      <hasCurrencyCode rdf:resource=\"http://www.oceanlink/org/lod/CurrencyCode/" + a.getCurrencyCode + "\"/>" + Constants.newLine +
+		  "      <hasCurrencyCode rdf:resource=\"http://www.oceanlink.org/lod/CurrencyCode/" + a.getCurrencyCode + "\"/>" + Constants.newLine +
 		  "      <hasCurrencyValue rdf:datatype=\"xsd:decimal\">" + a.getCurrencyValue + "</hasCurrencyValue>" + Constants.newLine +
 		  "   </rdf:Description>" + Constants.newLine +
 		  "</rdf:RDF>";

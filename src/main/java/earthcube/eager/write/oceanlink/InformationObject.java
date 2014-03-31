@@ -4,7 +4,7 @@ import earthcube.eager.util.Constants;
 
 public class InformationObject {
 	
-	public String toRdfXml ( InformationObject o ) {
+	public String toRdfXml ( InformationObjectData o ) {
 
 		  String output = 
 		

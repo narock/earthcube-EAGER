@@ -4,7 +4,7 @@ import earthcube.eager.util.Constants;
 
 public class Organization {
 	
-	public String toRdfXml ( Organization o ) {
+	public String toRdfXml ( OrganizationData o ) {
 
 		String output = 
 			
@@ -19,8 +19,8 @@ public class Organization {
 			"   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/Organization/" + o.getOrganization +"\">" + Constants.newLine +
 			"      <rdf:type rdf:resource=\"Organization\"/>" + Constants.newLine +
 			"      <rdfs:subClassOf rdf:resource=\"Agent\"/>" + Constants.newLine +
-			"      <performsAgentRole rdf:resource=\"http://www.oceanlink/org/lod/AgentRole/" + o.getAgentRole + "\"/>" + Constants.newLine +
-			"      <isDescribedBy rdf:resource=\"http://www.oceanlink/org/lod/InformationObject/" + o.getInformationObject + "\"/>" + Constants.newLine +
+			"      <performsAgentRole rdf:resource=\"http://www.oceanlink.org/lod/AgentRole/" + o.getAgentRole + "\"/>" + Constants.newLine +
+			"      <isDescribedBy rdf:resource=\"http://www.oceanlink.org/lod/InformationObject/" + o.getInformationObject + "\"/>" + Constants.newLine +
 			"   </rdf:Description>" + Constants.newLine +
 			"</rdf:RDF>";
 		

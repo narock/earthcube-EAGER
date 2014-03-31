@@ -4,7 +4,7 @@ import earthcube.eager.util.Constants;
 
 public class FundingAward {
 	
-	public String toRdfXml ( FundingAward fundingAward ) {
+	public String toRdfXml ( FundingAwardData fundingAward ) {
 	
 		String output = 
 				
@@ -19,12 +19,12 @@ public class FundingAward {
 		  "   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/FundingAward/" + fundingAward.getAward() + "\">" + Constants.newLine +
 		  "       <rdf:type rdf:resource=\"FundingAward\" />" + Constants.newLine +
 		  "       <hasFundingAgent rdf:resource=\"http://www.oceanlink.org/lod/Agent/" + fundingAward.getFundingAgent() + "\"/>" + Constants.newLine +
-		  "       <providesAgentRoleType rdf:resource=\"http://www.oceanlink/org/lod/AgentRoleType/" + fundingAward.getAgentRoleType + "\" />" + Constants.newLine +
+		  "       <providesAgentRoleType rdf:resource=\"http://www.oceanlink.org/lod/AgentRoleType/" + fundingAward.getAgentRoleType + "\" />" + Constants.newLine +
 		  "       <isFundedBy rdf:resource=\"http://www.oceanlink.org/lod/Organization/" + fundingAward.getFundingOrganization() + "\" />" + Constants.newLine +
 		  "       <startsAt rdf:datatype=\"time:Instant\">" + fundingAward.getStartInstant() + "</startsAt>" + Constants.newLine +
 		  "       <endsAt rdf:datatype=\"time:Instant\">" + fundingAward.getEndInstant() + "</endsAt>" + Constants.newLine +
-		  "       <hasAwardAmount rdf:resource=\"http://www.oceanlink/org/lod/AwardAmount/" + fundingAward.getAwardAmount() + "\"/>" + Constants.newLine +
-		  "       <isDescribedBy rdf:resource=\"http://www.oceanlink/org/lod/InformationObject/" + fundingAward.getInformationObject() + "\"/>" + Constants.newLine +
+		  "       <hasAwardAmount rdf:resource=\"http://www.oceanlink.org/lod/AwardAmount/" + fundingAward.getAwardAmount() + "\"/>" + Constants.newLine +
+		  "       <isDescribedBy rdf:resource=\"http://www.oceanlink.org/lod/InformationObject/" + fundingAward.getInformationObject() + "\"/>" + Constants.newLine +
 		  "   </rdf:Description>" + Constants.newLine +
 		  "</rdf:RDF>";
 		
