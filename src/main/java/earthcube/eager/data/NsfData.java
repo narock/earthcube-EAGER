@@ -1,7 +1,12 @@
 package earthcube.eager.data;
 
 public class NsfData
-{
+{	
+	
+	private String uriBase = "http://www.oceanlink.org/";
+
+	private long idCounter = -1;
+	public String createID() { return String.valueOf(idCounter++); }
 	
 	private String abstrct = null;
     private String uri = null;
@@ -31,19 +36,6 @@ public class NsfData
     public void setAwardID ( String s ) { awardID = s; }
     public void setFundingDivision ( String s ) { fundingDivision = s; }
     
-    public boolean hasAbstract () { if ( abstrct == null ) { return false; } else { return true; } }
-    public boolean hasTitle () { if ( title == null ) { return false; } else { return true; } }
-    public boolean hasStartDate () { if ( startDate == null ) { return false; } else { return true; } }
-    public boolean hasEndDate () { if ( endDate == null ) { return false; } else { return true; } }
-    public boolean hasAwardAmount () { if ( awardAmount == null ) { return false; } else { return true; } }
-    public boolean hasOrgCode () { if ( orgCode == null ) { return false; } else { return true; } }
-    public boolean hasPiFirstName () { if ( piFirstName == null ) { return false; } else { return true; } }
-    public boolean hasPiLastName () { if ( piLastName == null ) { return false; } else { return true; } }
-    public boolean hasPiEmail () { if ( piEmail == null ) { return false; } else { return true; } }
-    public boolean hasInstitution () { if ( institution == null ) { return false; } else { return true; } }
-    public boolean hasAwardID () { if ( awardID == null ) { return false; } else { return true; } }
-    public boolean hasFundingDivision () { if ( fundingDivision == null ) { return false; } else { return true; } }
-    
     public String getAbstract () { return abstrct; }
     public String getUri () { return uri; }
     public String getTitle () { return title; }
@@ -59,5 +51,41 @@ public class NsfData
     public String getFundingDivision () { return fundingDivision; }
     
     public String getFullName() { return piFirstName.trim() + " " + piLastName.trim(); }
+    
+    public String getPersonUri() { 
+    	
+    	String uri = uriBase + "Person/Person_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+    	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
+    	} else {
+    	  uri += createID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getPersonAgentRoleUri() { 
+    	
+    	String uri = uriBase + "AgentRole/AgentRole_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+    	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
+    	} else {
+    	  uri += createID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getPersonalInfoItemUri() { 
+    	
+    	String uri = uriBase + "PersonalInfoItem/PersonalInfoItem_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+    	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
+    	} else {
+    	  uri += createID();
+    	}
+    	return uri;
+    	
+    }
     
 }

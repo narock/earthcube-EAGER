@@ -1,11 +1,10 @@
 package earthcube.eager.write.oceanlink;
 
 import earthcube.eager.util.Constants;
-import earthcube.eager.data.NsfData;
 
 public class PersonalInfoItem {
 	
-	public String toRdfXml ( NsfData d ) {
+	public String toRdfXml ( String personInfoItemUri, String personUri, String personNameUri ) {
 		
 		String output = 
 			
@@ -17,10 +16,10 @@ public class PersonalInfoItem {
 			"   xmlns:time=\"http://www.w3.org/2006/time#\"" + Constants.newLine +
 			"   xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"" + Constants.newLine +
 			"   xml:base=\"http://schema.ocean-data.org/personal-info-item\">" + Constants.newLine +
-			"   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/PersonalInfoItem/" + d.getPersonalInfoItemUri() +"\">" + Constants.newLine +
+			"   <rdf:Description rdf:about=\"" + personInfoItemUri +"\">" + Constants.newLine +
 			"      <rdf:type rdf:resource=\"PersonalInfoItem\"/>" + Constants.newLine +
-			"      <isPersonalInfoItemOf rdf:resource=\"http://www.oceanlink.org/lod/Person/" + d.getPersonUri() + "\"/>" + Constants.newLine +
-			"      <hasPersonalInfoValue rdf:resource=\"http://www.oceanlink.org/lod/PersonName/" + d.getPersonNameUri() + "\"/>" + Constants.newLine +
+			"      <isPersonalInfoItemOf rdf:resource=\"" + personUri + "\"/>" + Constants.newLine +
+			"      <hasPersonalInfoValue rdf:resource=\"" + personNameUri + "\"/>" + Constants.newLine +
 			"   </rdf:Description>" + Constants.newLine +
 			"</rdf:RDF>";
 		

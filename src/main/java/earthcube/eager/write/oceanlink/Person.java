@@ -1,11 +1,10 @@
 package earthcube.eager.write.oceanlink;
 
 import earthcube.eager.util.Constants;
-import earthcube.eager.data.NsfData;
 
 public class Person {
 	
-	public String toRdfXml ( NsfData d ) {
+	public String toRdfXml ( String personUri, String agentRoleUri, String credential, String personInfoItemUri ) {
 	
 		String output = 
 			
@@ -17,12 +16,16 @@ public class Person {
 			"   xmlns:time=\"http://www.w3.org/2006/time#\"" + Constants.newLine +
 			"   xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"" + Constants.newLine +
 			"   xml:base=\"http://schema.ocean-data.org/person\">" + Constants.newLine +
-			"   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/Person/" + d.getPersonUri() +"\">" + Constants.newLine +
+			"   <rdf:Description rdf:about=\"" + personUri + "\">" + Constants.newLine +
 			"      <rdf:type rdf:resource=\"Person\"/>" + Constants.newLine +
 			"      <rdfs:subClassOf rdf:resource=\"Agent\"/>" + Constants.newLine +
-			"      <performsAgentRole rdf:resource=\"http://www.oceanlink.org/lod/AgentRole/" + d.getPersonRoleUri() + "\"/>" + Constants.newLine +
-			"      <hasCredential rdf:resource=\"http://www.oceanlink.org/lod/Credential/" + p.getCredential() + "\"/>" + Constants.newLine +
-			"      <hasPersonalInfoItem rdf:resource=\"http://www.oceanlink.org/lod/InformationObject/" + d.getPersonInformationObject + "\"/>" + Constants.newLine +
+			"      <performsAgentRole rdf:resource=\"" + agentRoleUri + "\"/>" + Constants.newLine;
+		
+		    if ( credential != null ) {
+			  output += "      <hasCredential rdf:resource=\"" + credential + "\"/>" + Constants.newLine;
+		    }
+		    
+			output += "      <hasPersonalInfoItem rdf:resource=\"" + personInfoItemUri + "\"/>" + Constants.newLine +
 			"   </rdf:Description>" + Constants.newLine +
 			"</rdf:RDF>";
 		

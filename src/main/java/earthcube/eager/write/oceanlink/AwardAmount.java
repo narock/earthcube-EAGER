@@ -1,11 +1,10 @@
 package earthcube.eager.write.oceanlink;
 
 import earthcube.eager.util.Constants;
-import earthcube.eager.data.NsfData;
 
 public class AwardAmount {
 	
-	public String toRdfXml ( NsfData n ) {
+	public String toRdfXml ( String awardAmountUri, String awardAmount ) {
 	
 		String output =
 		
@@ -17,12 +16,15 @@ public class AwardAmount {
 		  "   xmlns:time=\"http://www.w3.org/2006/time#\"" + Constants.newLine +
 		  "   xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"" + Constants.newLine +
 		  "   xml:base=\"http://schema.ocean-data.org/funding-award\">" + Constants.newLine +
-		  "   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/AwardAmount/" + n.getAwardAmountUri() + "\">" + Constants.newLine +
+		  "   <rdf:Description rdf:about=\"" + awardAmountUri + "\">" + Constants.newLine +
 		  "      <rdf:type rdf:resource=\"AwardAmount\"/>" + Constants.newLine +
-		  "      <hasCurrencyCode rdf:resource=\"http://www.oceanlink.org/lod/CurrencyCode/USD\"/>" + Constants.newLine +
-		  "      <hasCurrencyValue rdf:datatype=\"xsd:decimal\">" + n.getAwardAmount() + "</hasCurrencyValue>" + Constants.newLine +
-		  "   </rdf:Description>" + Constants.newLine +
-		  "</rdf:RDF>";
+		  "      <hasCurrencyCode rdf:resource=\"http://www.oceanlink.org/lod/CurrencyCode/USD\"/>" + Constants.newLine;
+		
+		  if ( awardAmount != null ) {
+		    output += "      <hasCurrencyValue rdf:datatype=\"xsd:decimal\">" + awardAmount + "</hasCurrencyValue>";
+		  }
+		  
+		  output += Constants.newLine + "   </rdf:Description>" + Constants.newLine + "</rdf:RDF>";
 		
 		return output;
 		  		
