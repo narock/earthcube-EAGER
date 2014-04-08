@@ -17,6 +17,9 @@ public class NsfXmlData extends DefaultHandler {
     boolean investigator = false;
     boolean institution = false;
     boolean division = false;
+    String piFirstName = null;
+    String piLastName = null;
+    String piEmail = null;
     
     public NsfData parse ( String file ) throws Exception {
     	XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -63,15 +66,21 @@ public class NsfXmlData extends DefaultHandler {
   	  if ( name.equals("Division") ) { division = false; }
   	  
   	  if ( investigator ) {
-  	     if ( name.equals("FirstName") ) this.piFirstName = d;
-  	     if ( name.equals("LastName") ) this.piLastName = d;
-  	     if ( name.equals("EmailAddress") ) this.piEmail = d;
-  	     if ( name.equals("RoleCode") ) if = 1 then set FirstName LastName
+  	     if ( name.equals("FirstName") ) piFirstName = d;
+  	     if ( name.equals("LastName") )  piLastName = d;
+  	     if ( name.equals("EmailAddress") ) piEmail = d;
+  	     if ( name.equals("RoleCode") ) {
+  	    	 if ( d.equals("1") ) { // 1 signifies the PI
+  	    		this.nsfData.setPiFirstName( piFirstName );
+  	    		this.nsfData.setPiLastName( piLastName );
+  	    		this.nsfData.setPiEmail( piEmail );
+  	    	 }
+  	     }
   	  }
   	  if ( name.equals("Investigator") ) { investigator = false; }
   	  
   	  if ( institution ) {
-  	    if (name.equals("Name") ) this.institution = d;
+  	    if (name.equals("Name") ) this.nsfData.setInstitution(d);
   	  }
   	  if ( name.equals("Institution") ) { institution = false; }
   			 

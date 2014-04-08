@@ -58,4 +58,6 @@ public class NsfData
     public String getAwardID () { return awardID; }
     public String getFundingDivision () { return fundingDivision; }
     
+    public String getFullName() { return piFirstName.trim() + " " + piLastName.trim(); }
+    
 }

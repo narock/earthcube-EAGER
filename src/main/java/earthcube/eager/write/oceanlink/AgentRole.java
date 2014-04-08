@@ -1,10 +1,11 @@
 package earthcube.eager.write.oceanlink;
 
 import earthcube.eager.util.Constants;
+import earthcube.eager.data.NsfData;
 
 public class AgentRole {
 	
-	public String toRdfXml ( AgentRoleData a ) {
+	public String toRdfXml ( NsfData d ) {
 	
 		String output = 
 			
@@ -16,10 +17,10 @@ public class AgentRole {
 			"   xmlns:time=\"http://www.w3.org/2006/time#\"" + Constants.newLine +
 			"   xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\"" + Constants.newLine +
 			"   xml:base=\"http://schema.ocean-data.org/agent-role\">" + Constants.newLine +
-			"   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/AgentRole/" + a.getAgentRole() +"\">" + Constants.newLine +
+			"   <rdf:Description rdf:about=\"http://www.oceanlink.org/lod/AgentRole/" + d.getAgentRoleUri() +"\">" + Constants.newLine +
 			"      <rdf:type rdf:resource=\"AgentRole\"/>" + Constants.newLine +
-			"      <isPerformedBy rdf:resource=\"http://www.oceanlink.org/lod/Agent/" + a.getAgent() + "\"/>" + Constants.newLine +
-			"      <isAgentRoleIn rdf:resource=\"http://www.oceanlink.org/lod/FundingAward/" + a.getFundingAward() + "\"/>" + Constants.newLine +
+			"      <isPerformedBy rdf:resource=\"http://www.oceanlink.org/lod/Agent/" + d.getAgentUri() + "\"/>" + Constants.newLine +
+			"      <isAgentRoleIn rdf:resource=\"http://www.oceanlink.org/lod/FundingAward/" + d.getFundingAwardUri() + "\"/>" + Constants.newLine +
 			"   </rdf:Description>" + Constants.newLine +
 			"</rdf:RDF>";
 		

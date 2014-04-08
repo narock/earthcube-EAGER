@@ -17,5 +17,7 @@ public class ol2 {
 	_:x ol:hasAgentRoleType ol:PI.
 
 	-- model AGU as organization and meetings as events? are abstracts programs or documentSets?
-			
+
+			-- add if values exist statements
+			-- email Bob, Adam re: waiting for paper
 }
