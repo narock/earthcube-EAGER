@@ -5,8 +5,9 @@ public class NsfData
 	
 	private String uriBase = "http://www.oceanlink.org/";
 
-	private long idCounter = -1;
-	public String createID() { return String.valueOf(idCounter++); }
+	private long idCounter = 0;
+	public void createID() { idCounter++; }
+	public String getID() { return String.valueOf(idCounter); }
 	
 	private String abstrct = null;
     private String uri = null;
@@ -58,7 +59,7 @@ public class NsfData
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += createID();
+    	  uri += getID();
     	}
     	return uri;
     	
@@ -70,7 +71,7 @@ public class NsfData
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += createID();
+    	  uri += getID();
     	}
     	return uri;
     	
@@ -82,10 +83,121 @@ public class NsfData
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += createID();
+    	  uri += getID();
     	}
     	return uri;
     	
     }
+    
+    public String getPersonNameUri() { 
+    	
+    	String uri = uriBase + "PersonName/PersonName_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+    	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getFundingAwardUri() { 
+    	
+    	String uri = uriBase + "FundingAward/FundingAward_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+    	  uri += awardID.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getFundingAwardInformationObjectFunderUri() { 
+    	
+    	String uri = uriBase + "InformationObject/FundingAward_Funder_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+    	  uri += awardID.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getFundingAwardInformationObjectInstitutionUri() { 
+    	
+    	String uri = uriBase + "InformationObject/FundingAward_Institution_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+    	  uri += awardID.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getFundingAwardInformationObjectUri() { 
+    	
+    	String uri = uriBase + "InformationObject/FundingAwardInformationObject_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+    	  uri += awardID.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getAwardAmountUri() { 
+    	
+    	String uri = uriBase + "AwardAmount/AwardAmount_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+    	  uri += awardID.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getStartDateUri() { 
+    	
+    	String uri = uriBase + "StartDate/";
+    	if ( (startDate != null) && ( startDate.trim() != "") ) {
+    	  uri += startDate.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getEndDateUri() { 
+    	
+    	String uri = uriBase + "EndDate/";
+    	if ( (endDate != null) && ( endDate.trim() != "") ) {
+    	  uri += endDate.trim(); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getOrganizationUri() { 
+    	
+    	String uri = uriBase + "Agent/Organization_";
+    	if ( (institution != null) && ( institution.trim() != "") ) {
+    	    institution = institution.trim();
+    		uri += institution.replace(" ", "_"); 
+    	} else {
+    	  uri += getID();
+    	}
+    	return uri;
+    	
+    }
+    
+    public String getPiRoleTypeUri() { return "http://www.oceanlink.org/lod/AgentRoleType/PrincipalInvestigator"; }
     
 }
