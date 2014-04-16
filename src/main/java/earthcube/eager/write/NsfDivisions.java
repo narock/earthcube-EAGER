@@ -140,7 +140,7 @@ public class NsfDivisions {
 
 	};
 	
-	public String[] findDivision ( String xmlText ) {
+	public String findDivision ( String xmlText ) {
 		
 		 int bestLen = 0;
 		 int currentLen;
@@ -152,8 +152,7 @@ public class NsfDivisions {
 		    	index = i;
 		    }
 		 }
-		 String[] result = { divisionUri[index], divisionFullName[index] };
-		 return result;
+		 return divisionUri[index];
 		 
 	}
 	

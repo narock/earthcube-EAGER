@@ -198,6 +198,8 @@ public class NsfData
     	
     }
     
-    public String getPiRoleTypeUri() { return "http://www.oceanlink.org/lod/AgentRoleType/PrincipalInvestigator"; }
+    public String getPiRoleTypeUri() { return "http://www.oceanlink.org/AgentRoleType/PrincipalInvestigator"; }
+    
+    public String getFunderRoleTypeUri() { return "http://www.oceanlink.org/AgentRoleType/FundingAgency"; }
     
 }

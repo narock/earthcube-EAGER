@@ -13,6 +13,8 @@ public class OceanLink {
 	private FileWrite fw = new FileWrite();
 	private GetListOfFiles getFileList = new GetListOfFiles ();
 	private NsfXmlData nsfParser = new NsfXmlData();
+	private ArrayList <String> personUris = new ArrayList <String> ();
+	private ArrayList <String> organizationUris = new ArrayList <String> ();
 	
 	// Patterns
 	private AgentRole agentRole = new AgentRole ();
@@ -25,6 +27,14 @@ public class OceanLink {
 	private PersonalInfoItem personInfoItem = new PersonalInfoItem ();
 	private PersonName personName = new PersonName ();
 	
+	private boolean personUriExists ( String uri ) {
+		if ( personUris.contains(uri) ) { return true; } else { return false; }
+	}
+	
+	private boolean organizationUriExists ( String uri ) {
+		if ( organizationUris.contains(uri) ) { return true; } else { return false; }
+	}
+	
 	public ArrayList <String> getListOfXmlFiles ( String dir, boolean verbose ) {
 		
 		ArrayList <String> xmlFiles = getFileList.Process( new File (dir) );
@@ -36,8 +46,8 @@ public class OceanLink {
 	public static void main (String[] args) {
 				
 		// Inputs
-		String inputDir = args[0];
-				
+		String inputDir = args[0];	
+		
 		String rdf;
 		OceanLink ol = new OceanLink ();
 
@@ -75,7 +85,7 @@ public class OceanLink {
 				nsfData = ol.nsfParser.parse( xmlFiles.get(i) );
 
 				// find the NSF Division
-				String[] nsfDivision = nsfDivisions.findDivision( nsfData.getFundingDivision() );
+				String nsfDivisionUri = nsfDivisions.findDivision( nsfData.getFundingDivision() );
 				
 				// create URIs
 				personUri = nsfData.getPersonUri();
@@ -91,35 +101,47 @@ public class OceanLink {
 			    startDateUri = nsfData.getStartDateUri();
 			    endDateUri = nsfData.getEndDateUri();
 			    
-			    does person and org uri already exist, if so then don't create person and org
+			    // does person and org uri already exist? if so then don't create person and org
+			    if ( !ol.personUriExists(personUri) ) {
 			    
-				// write out the RDF/XML
+			    	ol.personUris.add( personUri );
 				
-				// RDF for the Principal Investigator
-					// Person 
-					rdf = ol.person.toRdfXml( personUri, personAgentRoleUri, null, personalInfoItemUri );
-					// Person Agent Role
-					rdf = ol.agentRole.toRdfXml( personAgentRoleUri, personUri, fundingAwardUri, nsfData.getPiRoleTypeUri() );
-					//Personal Info
-					rdf = ol.personInfoItem.toRdfXml( personalInfoItemUri, personUri, personNameUri );
-					// Person Name
-					rdf = ol.personName.toRdfXml( personNameUri, nsfData.getFullName(), nsfData.getPiFirstName(), nsfData.getPiLastName() );
+				    // RDF for the Principal Investigator
+					  // Person 
+					  rdf = ol.person.toRdfXml( personUri, personAgentRoleUri, null, personalInfoItemUri );
+					  // Person Agent Role
+					  rdf = ol.agentRole.toRdfXml( personAgentRoleUri, personUri, fundingAwardUri, nsfData.getPiRoleTypeUri() );
+					  //Personal Info
+					  rdf = ol.personInfoItem.toRdfXml( personalInfoItemUri, personUri, personNameUri );
+					  // Person Name
+					  rdf = ol.personName.toRdfXml( personNameUri, nsfData.getFullName(), nsfData.getPiFirstName(), nsfData.getPiLastName() );
 					
-				// PI's Institution as an organization
-				rdf = ol.organization.toRdfXml( organizationUri, personAgentRoleUri, fundingAwardInformationObjectInstitutionUri, null );
+			    }
+			    
+			    if ( !ol.organizationUriExists(organizationUri) ) {
+			    	
+			    	ol.organizationUris.add( organizationUri );
+			    	
+				    // PI's Institution as an organization
+				    rdf = ol.organization.toRdfXml( organizationUri, personAgentRoleUri, fundingAwardInformationObjectInstitutionUri, null );
 				
+				    // Information Object for PI institution
+					rdf = ol.informationObject.toRdfXml( fundingAwardInformationObjectFunderUri, nsfData.getInstitution(), nsfData.getInstitution() );
+					
+			    }
+			    
 				// Funding Award
-				rdf = ol.fundingAward.toRdfXml( fundingAwardUri, personUri, personAgentRoleUri, nsfDivision[0], startDateUri, endDateUri, 
+				rdf = ol.fundingAward.toRdfXml( fundingAwardUri, personUri, personAgentRoleUri, nsfDivisionUri, startDateUri, endDateUri, 
 						awardAmountUri, fundingAwardInformationObjectUri, nsfData.getStartDate(), nsfData.getEndDate() );
 					
+				// Agent Role for the Funding Agency
+				rdf = ol.agentRole.toRdfXml( organizationAgentRoleUri, agentUri, agentRoleInUri, agentRoleTypeUri);
+				
 				// Funding Award Info Object
 				rdf = ol.fundingAwardInfoObject.toRdfXml( fundingAwardInformationObjectUri, nsfData.getAwardID(), nsfData.getTitle(), nsfData.getAbstract() );
 				
 				// Award Amount
 				rdf = ol.awardAmount.toRdfXml( awardAmountUri, nsfData.getAwardAmount() );
-				
-				// Information Object for PI institution
-				rdf = ol.informationObject.toRdfXml( fundingAwardInformationObjectFunderUri, nsfDivision[1], nsfDivision[1] );
 								
 				// increment the URI counter
 				nsfData.createID();
