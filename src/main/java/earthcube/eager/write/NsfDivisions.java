@@ -7,6 +7,7 @@ public class NsfDivisions {
 	public String[] getNsfDivsionUris () { return divisionUri; }
 	public String[] getNsfDivsionInfoObjectUris () { return divisionInfoObjectUri; }
 	public String[] getNsfDivisions () { return divisionFullName; }
+	public String[] getNSfDivisionsShortName () { return matchName; }
 	
 	private String[] divisionUri = {
 			
@@ -142,17 +143,21 @@ public class NsfDivisions {
 	
 	public String findDivision ( String xmlText ) {
 		
-		 int bestLen = 0;
-		 int currentLen;
-		 int index = -1;
-		 for ( int i=0; i<matchName.length; i++ ) {
-			currentLen = LongestCommonSubString.longestSubstr( xmlText, matchName[i] );
-		    if ( currentLen > bestLen ) { 
-		    	bestLen = currentLen;
-		    	index = i;
-		    }
+		 if ( xmlText.equals("") || xmlText.equals(null) ) {
+			 return "http://www.oceanlink.org/InformationObject/InformationObject_National_Science_Foundation";
+		 } else {
+			 int bestLen = 0;
+			 int currentLen;
+			 int index = -1;
+			 for ( int i=0; i<matchName.length; i++ ) {
+				 currentLen = LongestCommonSubString.longestSubstr( xmlText, matchName[i] );
+				 if ( currentLen > bestLen ) { 
+					 bestLen = currentLen;
+					 index = i;
+				 }
+			 }
+			 return divisionUri[index];
 		 }
-		 return divisionUri[index];
 		 
 	}
 	

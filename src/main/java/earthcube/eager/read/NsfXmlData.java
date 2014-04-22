@@ -66,8 +66,8 @@ public class NsfXmlData extends DefaultHandler {
   	  if ( name.equals("Division") ) { division = false; }
   	  
   	  if ( investigator ) {
-  	     if ( name.equals("FirstName") ) piFirstName = d;
-  	     if ( name.equals("LastName") )  piLastName = d;
+  	     if ( name.equals("FirstName") ) piFirstName = d.toUpperCase();
+  	     if ( name.equals("LastName") )  piLastName = d.toUpperCase();
   	     if ( name.equals("EmailAddress") ) piEmail = d;
   	     if ( name.equals("RoleCode") ) {
   	    	 if ( d.equals("1") ) { // 1 signifies the PI

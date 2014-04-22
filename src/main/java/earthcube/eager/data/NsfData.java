@@ -5,10 +5,6 @@ public class NsfData
 	
 	private String uriBase = "http://www.oceanlink.org/";
 
-	private long idCounter = 0;
-	public void createID() { idCounter++; }
-	public String getID() { return String.valueOf(idCounter); }
-	
 	private String abstrct = null;
     private String uri = null;
     private String title = null;
@@ -53,146 +49,218 @@ public class NsfData
     
     public String getFullName() { return piFirstName.trim() + " " + piLastName.trim(); }
     
-    public String getPersonUri() { 
+    public String getPersonUri( String id ) { 
     	
     	String uri = uriBase + "Person/Person_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getPersonAgentRoleUri() { 
+    public String getPersonFileName( String id ) {
+        
+    	String fileName = "NSF_Person_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+      	  fileName += piFirstName.trim() + "_" + piLastName.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+      	return fileName += ".rdf";
+      	
+    }
+ 
+    public String getPersonAgentRoleUri( String id ) { 
     	
     	String uri = uriBase + "AgentRole/AgentRole_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getPersonalInfoItemUri() { 
+    public String getPersonRoleFileName( String id, String count ) {
+        
+    	String fileName = "NSF_PersonRole_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+      	  fileName += piFirstName.trim() + "_" + piLastName.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+      	return fileName += "_" + count + ".rdf";
+      	
+    }
+
+    public String getPersonRoleFileName( String id ) {
+        
+    	String fileName = "NSF_PersonRole_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+      	  fileName += piFirstName.trim() + "_" + piLastName.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+      	return fileName += ".rdf";
+      	
+    }
+ 
+    public String getPersonalInfoItemUri( String id ) { 
     	
     	String uri = uriBase + "PersonalInfoItem/PersonalInfoItem_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getPersonNameUri() { 
+    public String getPersonInfoFileName( String id ) {
+        
+    	String fileName = "NSF_PersonInfo_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+      	  fileName += piFirstName.trim() + "_" + piLastName.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+      	return fileName += ".rdf";
+      	
+    }
+    
+    public String getPersonNameUri( String id ) { 
     	
     	String uri = uriBase + "PersonName/PersonName_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
     	  uri += piFirstName.trim() + "_" + piLastName.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getFundingAwardUri() { 
+    public String getPersonNameFileName( String id ) {
+    
+    	String fileName = "NSF_PersonName_";
+    	if ( (piFirstName != null) && (piLastName != null) ) {
+      	  fileName += piFirstName.trim() + "_" + piLastName.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+      	return fileName += ".rdf";
+      	
+    }
+    
+    public String getFundingAwardUri( String id ) { 
     	
     	String uri = uriBase + "FundingAward/FundingAward_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
     	  uri += awardID.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getFundingAwardInformationObjectFunderUri() { 
+    public String getFundingAwardFileName( String id ) {
     	
-    	String uri = uriBase + "InformationObject/FundingAward_Funder_";
+    	String fileName = "NSF_FundingAward_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
-    	  uri += awardID.trim(); 
-    	} else {
-    	  uri += getID();
-    	}
-    	return uri;
+      	  fileName += awardID.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+    	return fileName += ".rdf";
     	
     }
     
-    public String getFundingAwardInformationObjectInstitutionUri() { 
-    	
-    	String uri = uriBase + "InformationObject/FundingAward_Institution_";
-    	if ( (awardID != null) && ( awardID.trim() != "") ) {
-    	  uri += awardID.trim(); 
-    	} else {
-    	  uri += getID();
-    	}
-    	return uri;
-    	
-    }
-    
-    public String getFundingAwardInformationObjectUri() { 
+    public String getFundingAwardInformationObjectUri( String id ) { 
     	
     	String uri = uriBase + "InformationObject/FundingAwardInformationObject_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
     	  uri += awardID.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getAwardAmountUri() { 
+    public String getFundingAwardInfoObjectFileName( String id ) {
+    	
+    	String fileName = "NSF_FundingAwardInfoObject_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+      	  fileName += awardID.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+    	return fileName += ".rdf";
+    	
+    }
+    
+    public String getAwardAmountUri( String id ) { 
     	
     	String uri = uriBase + "AwardAmount/AwardAmount_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
     	  uri += awardID.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getStartDateUri() { 
+    public String getAwardAmountFileName( String id ) {
+    
+    	String fileName = "NSF_AwardAmount_";
+    	if ( (awardID != null) && ( awardID.trim() != "") ) {
+      	  fileName += awardID.trim(); 
+      	} else {
+      	  fileName += id;
+      	}
+    	return fileName += ".rdf";
+    	
+    }
+    
+    public String getStartDateUri( String id ) { 
     	
     	String uri = uriBase + "StartDate/";
     	if ( (startDate != null) && ( startDate.trim() != "") ) {
     	  uri += startDate.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getEndDateUri() { 
+    public String getEndDateUri( String id ) { 
     	
     	String uri = uriBase + "EndDate/";
     	if ( (endDate != null) && ( endDate.trim() != "") ) {
     	  uri += endDate.trim(); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
     }
     
-    public String getOrganizationUri() { 
+    public String getOrganizationUri( String id ) { 
     	
     	String uri = uriBase + "Agent/Organization_";
     	if ( (institution != null) && ( institution.trim() != "") ) {
     	    institution = institution.trim();
     		uri += institution.replace(" ", "_"); 
     	} else {
-    	  uri += getID();
+    	  uri += id;
     	}
     	return uri;
     	
