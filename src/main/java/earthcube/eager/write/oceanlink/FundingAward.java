@@ -27,7 +27,6 @@ public class FundingAward {
 		  "       <hasAwardAmount rdf:resource=\"" + awardAmountUri + "\"/>" + Constants.newLine +
 		  "       <isDescribedBy rdf:resource=\"" + informationObjectUri + "\"/>" + Constants.newLine +
 		  "   </rdf:Description>" + Constants.newLine +
-		  "</rdf:RDF>" + Constants.newLine +
 
 		  "<rdf:Description rdf:nodeID=\"" + startDateUri + "\">" + Constants.newLine +
           "   <rdf:type rdf:resource=\"http://www.w3.org/2006/time#Instant\"/>" + Constants.newLine;
@@ -46,6 +45,8 @@ public class FundingAward {
 		  }
 		  
           output += Constants.newLine + "</rdf:Description>";
+          
+          output += Constants.newLine + "</rdf:RDF>";
 		
 		return output;
 		

@@ -67,6 +67,11 @@
   	</plugins>
   </build>
   <dependencies>
+    <dependency>
+	 	<groupId>org.jsoup</groupId>
+		<artifactId>jsoup</artifactId>
+		<version>1.7.2</version>
+    </dependency>
 	<dependency>
 		<groupId>com.hp.hpl.jena</groupId>
 		<artifactId>jena</artifactId>

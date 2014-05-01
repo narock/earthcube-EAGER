@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import earthcube.eager.util.GetListOfFiles;
 import earthcube.eager.read.NsfRdfData;
 import earthcube.eager.util.FileWrite;
+import earthcube.eager.util.Constants;
 
 public class InvalidRdfXml
 {
@@ -32,7 +33,7 @@ public class InvalidRdfXml
 	  {
 		 try {
 			 NsfData nsfData = rdf.parse( rdfFiles.get(i) );
-		 } catch ( Exception e ) { fw.append(outputFile, rdfFiles.get(i)); }
+		 } catch ( Exception e ) { fw.append(outputFile, rdfFiles.get(i) + ": " + e + Constants.newLine); }
 
 	  }
 	  

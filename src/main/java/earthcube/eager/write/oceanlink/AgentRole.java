@@ -20,7 +20,7 @@ public class AgentRole {
 			"      <rdf:type rdf:resource=\"AgentRole\"/>" + Constants.newLine +
 			"      <isPerformedBy rdf:resource=\"" + agentUri + "\"/>" + Constants.newLine +
 			"      <isAgentRoleIn rdf:resource=\"" + agentRoleInUri + "\"/>" + Constants.newLine +
-			"	   <hasAgentRoleType rdf:resourc=\"" + agentRoleTypeUri + "\"/>" + Constants.newLine +
+			"	   <hasAgentRoleType rdf:resource=\"" + agentRoleTypeUri + "\"/>" + Constants.newLine +
 			"   </rdf:Description>" + Constants.newLine +
 			"</rdf:RDF>";
 		

@@ -9,6 +9,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.helpers.DefaultHandler;
+import org.jsoup.Jsoup;
 
 public class NsfXmlData extends DefaultHandler {
  
@@ -20,6 +21,20 @@ public class NsfXmlData extends DefaultHandler {
     String piFirstName = null;
     String piLastName = null;
     String piEmail = null;
+    
+    private String formatText ( String text ) {
+    	
+    	text = Jsoup.parse(text).text(); 				 // remove HTML markup
+  	    text = text.replaceAll("\\\\", ""); 		     // remove \ which are interpreted as escape characters
+		text = text.replaceAll("\"",""); 				 // remove " 
+		text = text.replaceAll("\\{", ""); 				 // remove {
+		text = text.replaceAll("\\}", ""); 				 // remove }
+  	    text = text.replaceAll(">", " greater than ");   // remove >
+ 		text = text.replaceAll("<", " less than "); 	 // remove <
+		text = text.replaceAll("&", " and "); 			 // remove &
+		return text;
+    
+    }
     
     public NsfData parse ( String file ) throws Exception {
     	XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -52,13 +67,22 @@ public class NsfXmlData extends DefaultHandler {
     
     public void endElement (String uri, String name, String qName) {
         
+      String[] parts;
       String d = accumulator.toString().trim();
-  	  if ( name.equals("AwardTitle") ) this.nsfData.setTitle(d);
+  	  if ( name.equals("AwardTitle") ) { this.nsfData.setTitle( this.formatText(d) ); }
   	  if ( name.equals("AwardID") ) this.nsfData.setAwardID(d);
-  	  if ( name.equals("AwardEffectiveDate") ) this.nsfData.setStartDate(d);
+  	  if ( name.equals("AwardEffectiveDate") ) {
+  		  
+  		  // format the start date to be xsd:date
+  		  parts = d.split("/");
+  		  if ( parts[0].length() != 2 ) { parts[0] = "0" + parts[0]; }
+  		  if ( parts[1].length() != 2 ) { parts[1] = "0" + parts[1]; }
+  		  d = parts[2] + "-" + parts[0] + "-" + parts[1];
+  		  this.nsfData.setStartDate(d);
+  	  }
   	  if ( name.equals("AwardExpirationDate") ) this.nsfData.setEndDate(d);
   	  if ( name.equals("AwardAmount") ) this.nsfData.setAwardAmount(d);
-      if ( name.equals("AbstractNarration") ) this.nsfData.setAbstract(d);
+      if ( name.equals("AbstractNarration") ) { this.nsfData.setAbstract( this.formatText(d) ); }
   	  
   	  if ( division ) {
   	     if ( name.equals("LongName") ) this.nsfData.setFundingDivision(d);

@@ -9,7 +9,7 @@ import earthcube.eager.write.oceanlink.*;
 import java.io.File;
 import java.util.ArrayList;
 
-public class OceanLink {
+public class AGU {
 	
 	private File file = null;
 	private FileWrite fw = new FileWrite();
@@ -54,6 +54,11 @@ public class OceanLink {
 			
 	public static void main (String[] args) {
 				
+		- create place
+		- create events
+		- create authors
+		- create RepositoryObject
+		
 		// Inputs
 		String inputDir = args[0];	
 		String outputDir = args[1];
@@ -103,10 +108,10 @@ public class OceanLink {
 		
 		for ( int i=0; i<xmlFiles.size(); i++ ) {
 					
-			if ( i == twentyPercent ) { System.out.println("Twenty Percent Complete"); }
-			if ( i == fortyPercent ) { System.out.println("Forty Percent Complete"); }
-			if ( i == sixtyPercent ) { System.out.println("Sixty Percent Complete"); }
-			if ( i == eightyPercent ) { System.out.println("Eighty Percent Complete"); }
+			if ( i == twentyPercent ) { System.out.println("Twenty Percent Complete..."); }
+			if ( i == fortyPercent ) { System.out.println("Forty Percent Complete..."); }
+			if ( i == sixtyPercent ) { System.out.println("Sixty Percent Complete..."); }
+			if ( i == eightyPercent ) { System.out.println("Eighty Percent Complete..."); }
 			
 			try {
 				
@@ -203,6 +208,8 @@ public class OceanLink {
 			
 				
 		} // end for
+		
+		System.out.println("One Hundred Percent Complete");
 		
 	}
 	
