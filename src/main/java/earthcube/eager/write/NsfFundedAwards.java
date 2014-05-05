@@ -114,6 +114,10 @@ public class NsfFundedAwards {
 			ol.clearXmlFileList();
 			xmlFiles = ol.getListOfXmlFiles( inputDir, true );
 			
+			// Create the year subdirectory
+			File subdir = new File ( outputDir );
+			subdir.mkdir();
+			
 			// Status statistics
 			int twentyPercent = (int) (xmlFiles.size() * 0.2);
 			int fortyPercent = (int) (xmlFiles.size() * 0.4);
