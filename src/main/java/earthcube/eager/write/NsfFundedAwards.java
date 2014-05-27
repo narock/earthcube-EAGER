@@ -127,7 +127,6 @@ public class NsfFundedAwards {
 			// Loop over all the files in this year
 			for ( int j=0; j<xmlFiles.size(); j++ ) {
 				
-				
 			   if ( j == 0 ) { System.out.println("Working on year: " + years[i] ); }
 			   if ( j == twentyPercent ) { System.out.println("  Twenty Percent Complete..."); }
 			   if ( j == fortyPercent ) { System.out.println("  Forty Percent Complete..."); }
@@ -168,24 +167,24 @@ public class NsfFundedAwards {
 				     // RDF for the Principal Investigator
 					  // Person 
 					  rdf = ol.person.toRdfXml( personUri, personAgentRoleUri, null, personalInfoItemUri );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonFileName( ol.getID() ), rdf );
+					  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfPersonFileName( ol.getID() ), rdf );
 					  //Personal Info
 					  rdf = ol.personInfoItem.toRdfXml( personalInfoItemUri, personUri, personNameUri );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonInfoFileName( ol.getID() ), rdf );
+					  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfPersonInfoFileName( ol.getID() ), rdf );
 					  // Person Name
 					  rdf = ol.personName.toRdfXml( personNameUri, nsfData.getFullName(), 
 							  nsfData.getPiFirstName(), nsfData.getPiLastName() );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonNameFileName( ol.getID() ), rdf );
+					  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfPersonNameFileName( ol.getID() ), rdf );
 					
 			      }
 			    
 			      // a person may be the PI of more than one funding award
 			      // check if the file already exists
-			      String fileName = outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID() );
-			      ol.file = new File ( outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID() ) );
+			      String fileName = outputDir + "\\" + nsfData.getNsfPersonRoleFileName( ol.getID() );
+			      ol.file = new File ( outputDir + "\\" + nsfData.getNsfPersonRoleFileName( ol.getID() ) );
 			      if ( ol.file.exists() ) { 
 			    	 personAgentRoleUri += ol.getPersonRoleCount();
-			    	 fileName = outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID(), 
+			    	 fileName = outputDir + "\\" + nsfData.getNsfPersonRoleFileName( ol.getID(), 
 			    			 ol.getPersonRoleCount() );
 			      }
 			      // Person Agent Role
@@ -214,16 +213,17 @@ public class NsfFundedAwards {
 				  rdf = ol.fundingAward.toRdfXml( fundingAwardUri, personUri, personAgentRoleUri, 
 						  nsfDivisionUri, startDateUri, endDateUri, awardAmountUri, 
 						  fundingAwardInformationObjectUri, nsfData.getStartDate(), nsfData.getEndDate() );
-				  ol.fw.newFile( outputDir + "\\" + nsfData.getFundingAwardFileName( ol.getID() ), rdf );
+				  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfFundingAwardFileName( ol.getID() ), rdf );
 				
 				  // Funding Award Info Object
 				  rdf = ol.fundingAwardInfoObject.toRdfXml( fundingAwardInformationObjectUri, 
 						  nsfData.getAwardID(), nsfData.getTitle(), nsfData.getAbstract() );
-				  ol.fw.newFile( outputDir + "\\" + nsfData.getFundingAwardInfoObjectFileName( ol.getID() ), rdf );
+				  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfFundingAwardInfoObjectFileName( ol.getID() ), 
+						  rdf );
 				
 				  // Award Amount
 				  rdf = ol.awardAmount.toRdfXml( awardAmountUri, nsfData.getAwardAmount() );
-				  ol.fw.newFile( outputDir + "\\" + nsfData.getAwardAmountFileName( ol.getID() ), rdf );
+				  ol.fw.newFile( outputDir + "\\" + nsfData.getNsfAwardAmountFileName( ol.getID() ), rdf );
 				
 				  // increment the URI counter
 				  ol.incrementID();

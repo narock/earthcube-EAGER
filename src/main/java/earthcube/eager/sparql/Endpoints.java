@@ -11,8 +11,14 @@ import com.hp.hpl.jena.sparql.engine.http.QueryExceptionHTTP;
 public abstract class Endpoints 
 {
 	
+	// AGU SPARQL endpoint
+	public final String agu = "http://abstractsearch.agu.org:8890/sparql";
+	
 	// Rolling Deck to Repository public sparql endpoint provided by Bob Arko
-	public final String r2r = "http://linked.rvdata.us/sparql";
+	public final String r2r = "http://data.rvdata.us/sparql";
+	
+	// BCO-DMO sparql endpoint
+	public final String bcodmo = "http://lod.bco-dmo.org/sparql/";
 	
 	// DBpedia public sparql endpoint
 	public final String dbpedia = "http://DBpedia.org/sparql";

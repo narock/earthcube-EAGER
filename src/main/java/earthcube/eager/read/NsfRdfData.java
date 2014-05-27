@@ -60,7 +60,7 @@ public class NsfRdfData extends DefaultHandler {
     public void endElement (String uri, String name, String qName) {
         
       String d = accumulator.toString().trim();
-  	  if ( name.equals("statedPurpose") ) this.abstrct = d;
+  	  if ( name.equals("hasDescription") ) this.abstrct = d;
   	
     }
     

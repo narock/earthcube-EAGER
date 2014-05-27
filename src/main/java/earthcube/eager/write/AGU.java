@@ -1,215 +1,321 @@
 package earthcube.eager.write;
 
 import earthcube.eager.util.FileWrite;
-import earthcube.eager.util.GetListOfFiles;
-import earthcube.eager.data.NsfData;
-import earthcube.eager.read.NsfXmlData;
+import earthcube.eager.data.AguData;
+import earthcube.eager.read.QueryAguTurtle;
 import earthcube.eager.write.oceanlink.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.hp.hpl.jena.query.ResultSet;
 
 public class AGU {
 	
 	private File file = null;
 	private FileWrite fw = new FileWrite();
-	private GetListOfFiles getFileList = new GetListOfFiles ();
-	private NsfXmlData nsfParser = new NsfXmlData();
+	private AguData aguData = new AguData();
 	private ArrayList <String> personUris = new ArrayList <String> ();
-	//private ArrayList <String> organizationUris = new ArrayList <String> ();
 	
 	// Counters to ensure unique IDs
+	private int totalPeople = 0;
+	private int unknownPeople = 0;
+	private int totalAbstracts = 0;
+	private int abstractCount = 0;
 	private long idCounter = 0;
-	private long personRoleCount = -1;
+	private long personRoleCount = 0;
 	public String getPersonRoleCount () { personRoleCount++; return String.valueOf(personRoleCount); }
 	public void incrementID() { idCounter++; }
 	public String getID() { return String.valueOf(idCounter); }
 	
 	// Patterns
 	private AgentRole agentRole = new AgentRole ();
-	private AwardAmount awardAmount = new AwardAmount ();
-	private FundingAward fundingAward = new FundingAward ();
-	private FundingAwardInfoObject fundingAwardInfoObject = new FundingAwardInfoObject ();
 	private InformationObject informationObject = new InformationObject ();
-	private Organization organization = new Organization ();
 	private Person person = new Person ();
 	private PersonalInfoItem personInfoItem = new PersonalInfoItem ();
 	private PersonName personName = new PersonName ();
+	private Event event = new Event ();
+	private Place place = new Place ();
+	private RepositoryObject repositoryObject = new RepositoryObject ();
 	
 	private boolean personUriExists ( String uri ) {
 		if ( personUris.contains(uri) ) { return true; } else { return false; }
 	}
 	
-	//private boolean organizationUriExists ( String uri ) {
-	//	if ( organizationUris.contains(uri) ) { return true; } else { return false; }
-	//}
-	
-	public ArrayList <String> getListOfXmlFiles ( String dir, boolean verbose ) {
+	private String getOriginatorUri () {
 		
-		ArrayList <String> xmlFiles = getFileList.Process( new File (dir) );
-		if ( verbose ) { System.out.println( "There are " + xmlFiles.size() + " XML files"); }
-		return xmlFiles;
+		String uri = "http://www.oceanlink.org/Originator/" + String.valueOf(abstractCount);
+		abstractCount++;
+		return uri;
+		
+	}
+	
+	private String getOriginatorListUri () {
+		
+		String uri = "http://www.oceanlink.org/OriginatorList/" + String.valueOf(abstractCount);
+		abstractCount++;
+		return uri;
+		
+	}
+	
+    private ArrayList <String> getCoAuthorOriginatorUris ( ArrayList <String> peopleUris ) {
+		
+    	int count = peopleUris.size();
+    	ArrayList <String> results = new ArrayList <String> ();
+    	for ( int i=0; i<count; i++ ) {
+    		results.add( "http://www.oceanlink.org/Originator/" + String.valueOf(abstractCount) );
+    		abstractCount++;
+    	}
+		return results;
 		
 	}
 			
 	public static void main (String[] args) {
-				
-		- create place
-		- create events
-		- create authors
-		- create RepositoryObject
-		
+						
 		// Inputs
 		String inputDir = args[0];	
 		String outputDir = args[1];
 		
 		String rdf;
-		OceanLink ol = new OceanLink ();
+		AGU agu = new AGU ();
 
-		// Create NSF as an Organization and NSF Divisions as Organizations
-		NsfData nsfData = new NsfData ();
-		NsfDivisions nsfDivisions = new NsfDivisions ();
-		String[] divisions = nsfDivisions.getNsfDivisions();
-		String[] divisionUri = nsfDivisions.getNsfDivsionUris();
-		String[] divisionShortName = nsfDivisions.getNSfDivisionsShortName();
-		String[] divisionInfoObjectUri = nsfDivisions.getNsfDivsionInfoObjectUris();
+		// Create San Francisco as a place
+		String placeUri = agu.aguData.getPlaceUri("SanFrancisco");
+		String informationObjectUri = agu.aguData.getInformationObjectUri("AGUFallMeeting");
+		rdf = agu.place.toRdfXml(placeUri, informationObjectUri);
+		agu.fw.newFile(outputDir + "\\" + "AGU_Place.rdf", rdf);
+		rdf = agu.informationObject.toRdfXml(informationObjectUri, "San Francisco, CA, USA", 
+				"AGU Fall Meeting - annually in San Francisco, CA, USA");
+		agu.fw.newFile(outputDir + "\\" + "AGU_InformationObject.rdf", rdf);
 		
-		//// NSF
-		rdf = ol.organization.toRdfXml( "http://www.oceanlink.org/Organization/National_Science_Foundation", 
-				nsfData.getFunderRoleTypeUri(), 
-				"http://www.oceanlink.org/InformationObject/InformationObject_National_Science_Foundation",
-			    divisionUri);
-		ol.fw.newFile( outputDir + "\\NSF.rdf", rdf );
-		rdf = ol.informationObject.toRdfXml( 
-				"http://www.oceanlink.org/InformationObject/InformationObject_National_Science_Foundation", 
-				"The National Science Foundation", "The National Science Foundation");		
-		ol.fw.newFile( outputDir + "\\NSF_Information_Object.rdf", rdf );
+		// Create Ocean Science meetings as places
+		String[] places = {
+				"SanAntonio", "Honolulu", "Portland", "Honolulu", "Portland"
+		};
+		String[] oceanPlaceUris = {
+				agu.aguData.getPlaceUri(places[0]),
+				agu.aguData.getPlaceUri(places[1]),
+				agu.aguData.getPlaceUri(places[2]),
+				agu.aguData.getPlaceUri(places[3]),
+				agu.aguData.getPlaceUri(places[4])
+		};
+		String[] oceanInformationObjectUris = {
+				agu.aguData.getInformationObjectUri("OceanSciencesMeeting2000"),
+				agu.aguData.getInformationObjectUri("OceanSciencesMeeting2002"),
+				agu.aguData.getInformationObjectUri("OceanSciencesMeeting2004"),
+				agu.aguData.getInformationObjectUri("OceanSciencesMeeting2006"),
+				agu.aguData.getInformationObjectUri("OceanSciencesMeeting2010")
+		};
+		for ( int i=0; i<oceanPlaceUris.length; i++ ) {
+		   rdf = agu.place.toRdfXml( oceanPlaceUris[i], oceanInformationObjectUris[i] );
+		   agu.fw.newFile(outputDir + "\\" + "OceanScience_Place_" + String.valueOf(i) + ".rdf", rdf);
+		   rdf = agu.informationObject.toRdfXml(oceanInformationObjectUris[i], places[i], 
+				   "AGU Ocean Sciences Meeting");
+		   agu.fw.newFile(outputDir + "\\" + "OceanScience_InformationObject_" + String.valueOf(i) + ".rdf", rdf);
+		}
+				
+        // Create AGU Meetings as Events
+		String[] fallEventUris = agu.aguData.getFallEventUris();
+		String[] oceanEventUris = agu.aguData.getOceanScienceEventUris();
+		String[] fallTimeUris = agu.aguData.getFallTimeUris();
+		String[] oceanTimeUris = agu.aguData.getOceanTimeUris();
+		String[] fallBeginUris = agu.aguData.getFallTimeBeginEndUris("Beginning");
+		String[] fallEndUris = agu.aguData.getFallTimeBeginEndUris("End");
+		String[] oceanBeginUris = agu.aguData.getOceanTimeBeginEndUris("Beginning");
+		String[] oceanEndUris = agu.aguData.getOceanTimeBeginEndUris("End");
+		String[] fallTimes = agu.aguData.getFallMeetingTimes();
+		String[] oceanTimes = agu.aguData.getOceanMeetingTimes();
 		
-        //// NSF Divisions
-		for ( int i=0; i<divisionUri.length; i++ ) {
-			rdf = ol.organization.toRdfXml( divisionUri[i], nsfData.getFunderRoleTypeUri(), divisionInfoObjectUri[i], null );
-			ol.fw.newFile( outputDir + "\\NSF_" + divisionShortName[i].replace(" ","_") + ".rdf", rdf );
-			// Create associated Information Object
-			rdf = ol.informationObject.toRdfXml( divisionInfoObjectUri[i], divisions[i], divisions[i] );
-			ol.fw.newFile( outputDir + "\\NSF_Information_Object_" + divisionShortName[i].replace(" ","_") + ".rdf", rdf );
+		// Combine Fall and Ocean science event uris into one array
+		int size = fallEventUris.length + oceanEventUris.length;
+		String[] eventUris = new String[size];
+		for ( int i=0; i<fallEventUris.length; i++ ) { eventUris[i] = fallEventUris[i]; }
+		for ( int i=fallEventUris.length; i<oceanEventUris.length; i++ ) { eventUris[i] = oceanEventUris[i]; }
+		
+		// Fall Meetings
+		String times;
+		String[] parts;
+		for ( int i=0; i<fallEventUris.length; i++ ) {
+			times = fallTimes[i];
+			parts = times.split(":");
+			rdf = agu.event.toRdfXml(fallEventUris[i], placeUri, fallTimeUris[i], 
+					fallBeginUris[i], fallEndUris[i], parts[0], parts[1]);
+			agu.fw.newFile(outputDir + "\\" + "AGU_Event_" + String.valueOf(i) + ".rdf", rdf);
+		}
+			
+		// Ocean Science Meetings
+		for ( int i=0; i<oceanEventUris.length; i++ ) {
+			times = oceanTimes[i];
+			parts = times.split(":");
+			rdf = agu.event.toRdfXml(oceanEventUris[i], oceanPlaceUris[i], oceanTimeUris[i], 
+					oceanBeginUris[i], oceanEndUris[i], parts[0], parts[1]);
+			agu.fw.newFile(outputDir + "\\" + "OceanScience_Event_" + String.valueOf(i) + ".rdf", rdf);
 		}
 		
-		// Find all the XML files
-		ArrayList <String> xmlFiles = ol.getListOfXmlFiles( inputDir, true );
-			
-		// Loop over all the files
-		String personUri, personAgentRoleUri, personalInfoItemUri, personNameUri, fundingAwardUri, 
-		awardAmountUri, startDateUri, endDateUri, fundingAwardInformationObjectUri;
+		// Years for which there is AGU data
+		String[] dirs = {"fall2000", "fall2001", "fall2002", "fall2003", "fall2004", "fall2005", "fall2006",
+				"fall2007", "fall2008", "fall2009", "fall2010", "fall2011", "fall2012", "fall2013", "os2000", 
+				"os2002", "os2004", "os2006", "os2010"};
+		String[] turtleFiles = {"fm00.ttl", "fm01.ttl", "fm02.ttl", "fm03.ttl", "fm04.ttl", "fm05.ttl", "fm06.ttl",
+					"fm07.ttl", "fm08.ttl", "fm09.ttl", "fm10.ttl", "fm11.ttl", "fm12.ttl", "fm13.ttl", "os00.ttl", 
+					"os02.ttl", "os04.ttl", "os06.ttl", "os10.ttl"};
+		  
+		// Variables 
+		String authorName;
+		AguData aguData = new AguData ();
+		ArrayList <AguData> aguAbstracts = null;
+		QueryAguTurtle aguQuery = new QueryAguTurtle ();
+		HashMap <String,String> authors = new HashMap <String,String> ();
+		HashMap <String,String> authorIndex = new HashMap <String,String> ();
+		String personUri, personAgentRoleUri, personalInfoItemUri, personNameUri, repositoryObjectUri, oDir;
+		String firstAuthorPersonUri = null;
 		
-		int twentyPercent = (int) (xmlFiles.size() * 0.2);
-		int fortyPercent = (int) (xmlFiles.size() * 0.4);
-		int sixtyPercent = (int) (xmlFiles.size() * 0.6);
-		int eightyPercent = (int) (xmlFiles.size() * 0.8);
-		
-		for ( int i=0; i<xmlFiles.size(); i++ ) {
-					
-			if ( i == twentyPercent ) { System.out.println("Twenty Percent Complete..."); }
-			if ( i == fortyPercent ) { System.out.println("Forty Percent Complete..."); }
-			if ( i == sixtyPercent ) { System.out.println("Sixty Percent Complete..."); }
-			if ( i == eightyPercent ) { System.out.println("Eighty Percent Complete..."); }
-			
-			try {
+		// Read the AGU people file
+		//aguQuery.readPeopleFile( inputDir + "\\" + "people.ttl");
 				
-				// parse the XML file
-				nsfData = ol.nsfParser.parse( xmlFiles.get(i) );
+		// Loop over all the AGU data
+		for ( int i=0; i<turtleFiles.length; i++ ) {
+		  
+			  // remove all agu abstracts from the previous file
+			  // this will speed up searching if a particular abstract already exists
+			  long startTime = System.currentTimeMillis();
+			  aguQuery.clearAguAbstracts();
+			  oDir = outputDir + "\\" + dirs[i];
+			  System.out.println("Working on: " + turtleFiles[i]);
+			  
+			  // Create the subdirectory to write into
+			  
+			  File subDir = new File (outputDir + "\\" + dirs[i]);
+			  subDir.mkdir();
+			  
+			  // read the turtle data
+			  aguQuery.readMeetingFile( inputDir + "\\" + turtleFiles[i] );
+			  
+			  // execute the SPARQL query and get the abstract texts
+			  ResultSet rs = aguQuery.sparqlQuery( QueryAguTurtle.abstractQuery );
+			  aguQuery.getSparqlQueryResultsAbstract(rs);
+			  aguAbstracts = aguQuery.getAbstracts();
+			  
+			  // status variables
+			  int twentyPercent = (int) (.2 * aguAbstracts.size());
+			  int fourtyPercent = (int) (.4 * aguAbstracts.size());
+			  int sixtyPercent = (int) (.6 * aguAbstracts.size());
+			  int eightyPercent = (int) (.8 * aguAbstracts.size());
+			  System.out.println("  Number of AGU Abstracts for this year: " + aguAbstracts.size());
+			
+			  // Loop over all the abstracts for this year
+			  for ( int j=0; j<aguAbstracts.size(); j++ ) {
+			
+				  AguData currentAbstract = aguAbstracts.get(j);
+						
+				  if ( j == twentyPercent ) { System.out.println("  Twenty Percent Complete..."); }
+				  if ( j == fourtyPercent ) { System.out.println("  Forty Percent Complete..."); }
+				  if ( j == sixtyPercent ) { System.out.println("  Sixty Percent Complete..."); }
+				  if ( j == eightyPercent ) { System.out.println("  Eighty Percent Complete..."); }
+				   
+				  // Loop over all the authors for this abstract
+				  ArrayList <String> authorUris = new ArrayList <String> ();
+				  authors = currentAbstract.getAuthorsData();
+				  authorIndex = currentAbstract.getAuthors();
+				  Iterator <Map.Entry<String, String>> it = authors.entrySet().iterator();
+				  while (it.hasNext()) {
+				      Map.Entry <String,String> pairs = (Map.Entry <String,String>) it.next();
+				     
+				      // Create Uris
+				      agu.totalPeople++;
+				      authorName = pairs.getValue().trim();
+				      parts = authorName.split(":"); // authorName is actually name:email
+				      authorName = parts[0].replace(" ", "_");
+				      authorName = authorName.replace(",", "");
+				      authorName = authorName.toUpperCase();
+					  personUri = currentAbstract.getPersonUri( agu.getID(), authorName );
+				      personAgentRoleUri = currentAbstract.getPersonAgentRoleUri( agu.getID(), authorName );
+				      personalInfoItemUri = currentAbstract.getPersonalInfoItemUri( agu.getID(), authorName );
+				      personNameUri = currentAbstract.getPersonNameUri( agu.getID(), authorName );
+				      repositoryObjectUri = currentAbstract.getRepositoryObjectUri( agu.getID() );
+				      
+				      // sometimes we don't have any person data
+				      if ( authorName.contains("Unknown") ) {
+				    	  personUri = "http://www.oceanlink.org/Person/Unknown_Person";
+				    	  agu.unknownPeople++;
+				      }
+				      
+				      // find the first author
+				      String thisAuthorIndex = authorIndex.get( pairs.getKey() );
+				      if ( thisAuthorIndex.equals("1") ) { 
+				    	  firstAuthorPersonUri = personUri; 
+				      } else { authorUris.add( personUri ); }
+				      
+					  // Create authors rdf
+					  // does person and already exist? if so then don't create 
+				      if ( !agu.personUriExists(personUri) ) {
+				    	
+				    	 agu.personUris.add( personUri );
+				    	
+						 // Person 
+						 rdf = agu.person.toRdfXml( personUri, personAgentRoleUri, null, personalInfoItemUri );
+						 agu.fw.newFile( oDir + "\\" + currentAbstract.getAguPersonFileName( agu.getID(), 
+								 authorName ), rdf );
+						 //Personal Info
+						 rdf = agu.personInfoItem.toRdfXml( personalInfoItemUri, personUri, personNameUri );
+						 agu.fw.newFile( oDir + "\\" + currentAbstract.getAguPersonInfoFileName( agu.getID(), 
+								 authorName ), rdf );
+						 // Person Name
+						 rdf = agu.personName.toRdfXml( personNameUri, currentAbstract.getFullName( authorName ), 
+								 currentAbstract.getFirstName( authorName ), 
+								 currentAbstract.getLastName( authorName ) );
+						 agu.fw.newFile( oDir + "\\" + currentAbstract.getAguPersonNameFileName( agu.getID(), 
+								 authorName ), rdf );
+						
+				      }
+				    
+				      // a person may be the author of more than one abstract
+				      // check if the file already exists
+				      String fileName = oDir + "\\" + agu.aguData.getAguPersonRoleFileName( agu.getID(), 
+				    		  authorName );
+				      agu.file = new File ( oDir + "\\" + 
+				           currentAbstract.getAguPersonRoleFileName( agu.getID(), authorName ) );
+				      if ( agu.file.exists() ) { 
+				    	 personAgentRoleUri += agu.getPersonRoleCount();
+				    	 fileName = oDir + "\\" + currentAbstract.getAguPersonRoleFileName( agu.getID(), 
+				    			 agu.getPersonRoleCount() );
+				      }
+				      // Person Agent Role
+					  rdf = agu.agentRole.toRdfXml( personAgentRoleUri, personUri, repositoryObjectUri, 
+							  aguData.getAuthorRoleTypeUri() );
+					  agu.fw.newFile( fileName, rdf );
+							  
+				      it.remove(); // avoids a ConcurrentModificationException
+					  
+				  } // end loop over all authors
 
-				// find the NSF Division
-				String nsfDivisionUri = nsfDivisions.findDivision( nsfData.getFundingDivision() );
-				
-				// create URIs
-				personUri = nsfData.getPersonUri( ol.getID() );
-			    personAgentRoleUri = nsfData.getPersonAgentRoleUri( ol.getID() );
-			    personalInfoItemUri = nsfData.getPersonalInfoItemUri( ol.getID() );
-			    personNameUri = nsfData.getPersonNameUri( ol.getID() );
-			    fundingAwardUri = nsfData.getFundingAwardUri( ol.getID() );
-			    fundingAwardInformationObjectUri = nsfData.getFundingAwardInformationObjectUri( ol.getID() );
-			    awardAmountUri = nsfData.getAwardAmountUri( ol.getID() );
-			    startDateUri = nsfData.getStartDateUri( ol.getID() );
-			    endDateUri = nsfData.getEndDateUri( ol.getID() );
-			    
-			    // sometimes we don't have any person data
-			    if ( nsfData.getPiFirstName() == null && nsfData.getPiLastName() == null ) {
-		    		personUri = "http://www.oceanlink.org/Person/Unknown_Person";
-		    		nsfData.setPiFirstName("Unknown");
-		    		nsfData.setPiLastName("Unknown");
-		    	}
-			    
-			    // does person and already exist? if so then don't create 
-			    if ( !ol.personUriExists(personUri) ) {
-			    	
-			    	ol.personUris.add( personUri );
-			    	
-				    // RDF for the Principal Investigator
-					  // Person 
-					  rdf = ol.person.toRdfXml( personUri, personAgentRoleUri, null, personalInfoItemUri );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonFileName( ol.getID() ), rdf );
-					  //Personal Info
-					  rdf = ol.personInfoItem.toRdfXml( personalInfoItemUri, personUri, personNameUri );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonInfoFileName( ol.getID() ), rdf );
-					  // Person Name
-					  rdf = ol.personName.toRdfXml( personNameUri, nsfData.getFullName(), 
-							  nsfData.getPiFirstName(), nsfData.getPiLastName() );
-					  ol.fw.newFile( outputDir + "\\" + nsfData.getPersonNameFileName( ol.getID() ), rdf );
-					
-			    }
-			    
-			    // a person may be the PI of more than one funding award
-			    // check if the file already exists
-			    String fileName = outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID() );
-			    ol.file = new File ( outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID() ) );
-			    if ( ol.file.exists() ) { 
-			    	personAgentRoleUri += ol.getPersonRoleCount();
-			    	fileName = outputDir + "\\" + nsfData.getPersonRoleFileName( ol.getID(), ol.getPersonRoleCount() );
-			    }
-			    // Person Agent Role
-				rdf = ol.agentRole.toRdfXml( personAgentRoleUri, personUri, fundingAwardUri, nsfData.getPiRoleTypeUri() );
-				ol.fw.newFile( fileName, rdf );
-			    
-			    /**
-			    // does the organization already exist
-			    if ( !ol.organizationUriExists(organizationUri) ) {
-			    	
-			    	ol.organizationUris.add( organizationUri );
-			    	
-				    // PI's Institution as an organization
-				    rdf = ol.organization.toRdfXml( organizationUri, personAgentRoleUri, fundingAwardInformationObjectInstitutionUri, null );
-				
-				    // Information Object for PI institution
-					rdf = ol.informationObject.toRdfXml( fundingAwardInformationObjectFunderUri, nsfData.getInstitution(), nsfData.getInstitution() );
-					
-			    }
-			    **/
-			    
-				// Funding Award
-				rdf = ol.fundingAward.toRdfXml( fundingAwardUri, personUri, personAgentRoleUri, nsfDivisionUri, startDateUri, 
-						endDateUri, awardAmountUri, fundingAwardInformationObjectUri, nsfData.getStartDate(), nsfData.getEndDate() );
-				ol.fw.newFile( outputDir + "\\" + nsfData.getFundingAwardFileName( ol.getID() ), rdf );
-				
-				// Funding Award Info Object
-				rdf = ol.fundingAwardInfoObject.toRdfXml( fundingAwardInformationObjectUri, nsfData.getAwardID(), nsfData.getTitle(), 
-						nsfData.getAbstract() );
-				ol.fw.newFile( outputDir + "\\" + nsfData.getFundingAwardInfoObjectFileName( ol.getID() ), rdf );
-				
-				// Award Amount
-				rdf = ol.awardAmount.toRdfXml( awardAmountUri, nsfData.getAwardAmount() );
-				ol.fw.newFile( outputDir + "\\" + nsfData.getAwardAmountFileName( ol.getID() ), rdf );
-				
-				// increment the URI counter
-				ol.incrementID();
-				
-			} catch ( Exception e ) { 
-				System.out.println(e); 
-			}
-			
-				
-		} // end for
-		
-		System.out.println("One Hundred Percent Complete");
+				  // Create RepositoryObject
+				  rdf = agu.repositoryObject.toRdfXml( agu.aguData.getRepositoryObjectUri( agu.getID() ),
+						  currentAbstract.getAbstractText(), 
+						  currentAbstract.getKeywords(), currentAbstract.getAbstractTitle(), 
+						  eventUris[i], agu.getOriginatorListUri(), agu.getOriginatorUri(), 
+						  firstAuthorPersonUri, agu.getCoAuthorOriginatorUris(authorUris) , authorUris);
+			      agu.fw.newFile(oDir + "\\" + "AGU_RepositoryObject_" + 
+						  String.valueOf(agu.totalAbstracts) + ".rdf", rdf);
+			      
+			      agu.totalAbstracts++;
+			      agu.incrementID();
+
+			  } // end loop over year
+			  
+			  long endTime = System.currentTimeMillis();
+			  long duration = ( endTime-startTime )/1000;
+			  System.out.println("    Computation time: " + duration + " seconds");
+			  System.out.println("    Number of times AGU Queried: " + aguQuery.getAguQueryCount());
+			  System.out.println("    Total people so far: " + agu.totalPeople);
+			  System.out.println("    Total unknown people so far: " + agu.unknownPeople);
+			  System.out.println("    Total abstracts so far: " + agu.totalAbstracts);
+			  aguQuery.clearQueriesToAgu();
+			  
+		} // end loop over all agu files
 		
 	}
 	

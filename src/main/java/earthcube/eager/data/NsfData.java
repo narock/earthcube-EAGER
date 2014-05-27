@@ -61,7 +61,7 @@ public class NsfData
     	
     }
     
-    public String getPersonFileName( String id ) {
+    public String getNsfPersonFileName( String id ) {
         
     	String fileName = "NSF_Person_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
@@ -85,7 +85,7 @@ public class NsfData
     	
     }
     
-    public String getPersonRoleFileName( String id, String count ) {
+    public String getNsfPersonRoleFileName( String id, String count ) {
         
     	String fileName = "NSF_PersonRole_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
@@ -97,7 +97,7 @@ public class NsfData
       	
     }
 
-    public String getPersonRoleFileName( String id ) {
+    public String getNsfPersonRoleFileName( String id ) {
         
     	String fileName = "NSF_PersonRole_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
@@ -121,7 +121,7 @@ public class NsfData
     	
     }
     
-    public String getPersonInfoFileName( String id ) {
+    public String getNsfPersonInfoFileName( String id ) {
         
     	String fileName = "NSF_PersonInfo_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
@@ -145,7 +145,7 @@ public class NsfData
     	
     }
     
-    public String getPersonNameFileName( String id ) {
+    public String getNsfPersonNameFileName( String id ) {
     
     	String fileName = "NSF_PersonName_";
     	if ( (piFirstName != null) && (piLastName != null) ) {
@@ -169,7 +169,7 @@ public class NsfData
     	
     }
     
-    public String getFundingAwardFileName( String id ) {
+    public String getNsfFundingAwardFileName( String id ) {
     	
     	String fileName = "NSF_FundingAward_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
@@ -193,7 +193,7 @@ public class NsfData
     	
     }
     
-    public String getFundingAwardInfoObjectFileName( String id ) {
+    public String getNsfFundingAwardInfoObjectFileName( String id ) {
     	
     	String fileName = "NSF_FundingAwardInfoObject_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
@@ -217,7 +217,7 @@ public class NsfData
     	
     }
     
-    public String getAwardAmountFileName( String id ) {
+    public String getNsfAwardAmountFileName( String id ) {
     
     	String fileName = "NSF_AwardAmount_";
     	if ( (awardID != null) && ( awardID.trim() != "") ) {
@@ -265,9 +265,9 @@ public class NsfData
     	return uri;
     	
     }
+   
+    public String getPiRoleTypeUri() { return "http://schema.oceanlink.org/agent-role#PrincipalInvestigator"; }
     
-    public String getPiRoleTypeUri() { return "http://www.oceanlink.org/AgentRoleType/PrincipalInvestigator"; }
-    
-    public String getFunderRoleTypeUri() { return "http://www.oceanlink.org/AgentRoleType/FundingAgency"; }
+    public String getFunderRoleTypeUri() { return "http://schema.oceanlink.org/agent-role#FundingAgency"; }
     
 }
